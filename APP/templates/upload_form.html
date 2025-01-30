@@ -1,60 +1,50 @@
-<!-- templates/upload_form.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Image</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .form-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        input[type="file"] {
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .message {
-            margin-top: 20px;
-            font-size: 18px;
-            color: green;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Upload an Image</h1>
 
-    <div class="form-container">
-        <h2>Upload an Image</h2>
-        <form action="/upload/" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" required>
-            <br>
+        <!-- Image Preview -->
+        <div class="preview-container">
+            <img id="imagePreview" src="" alt="Image preview" style="display: none;">
+        </div>
+
+        <!-- Upload Form -->
+        <form id="uploadForm" action="/upload/" method="post" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="file" accept="image/*" required>
             <button type="submit">Upload</button>
         </form>
+
+        <!-- Display response and uploaded image -->
         {% if message %}
-            <div class="message">{{ message }}</div>
+            <div class="response">
+                <p>{{ message }}</p>
+                {% if filename %}
+                    <img src="/uploads/{{ filename }}" alt="Uploaded Image">
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>
