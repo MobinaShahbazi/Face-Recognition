@@ -33,18 +33,26 @@
     </div>
 
     <script>
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const previewContainer = document.querySelector('.response'); // Select response div
+        const preview = document.getElementById('imagePreview');
+
+        // Hide and clear previous uploaded image (if exists)
+        if (previewContainer) {
+            previewContainer.style.display = 'none';
+            previewContainer.innerHTML = ''; // Remove previous image and message
+        }
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 </body>
 </html>
